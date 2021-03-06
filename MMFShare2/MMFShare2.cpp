@@ -5,12 +5,12 @@
 
 HANDLE g_hMapFile;
 LPSTR g_lpBuff;
-
+DWORD dwType;
 
 
 int main()
 {
-
+    dwType = 0;
 
     //内核对象，物理页
     g_hMapFile = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, 4 * 1024, TEXT("共享内存"));;
@@ -18,9 +18,20 @@ int main()
     //将物理页与线性地址进行映射
     g_lpBuff = (LPSTR)MapViewOfFile(g_hMapFile, FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, 4 * 1024);
 
+    for (;;) {
+        if (g_lpBuff != NULL) {
+        
+            CopyMemory(&dwType, g_lpBuff, 4);
+            if(dwType != 0){
+                printf("数据: %x \n", dwType);
+                *(PDWORD)g_lpBuff = 0x0;
+            }
+            
+        }
 
-    printf("进程B %x", *(PDWORD)g_lpBuff);
-
+        Sleep(1000);
+        
+    }
 
     //关闭映射
     UnmapViewOfFile(g_lpBuff);
