@@ -72,7 +72,7 @@ INT_PTR CALLBACK DialogProc(_In_ HWND   hwndDlg, _In_ UINT   uMsg, _In_ WPARAM w
 DWORD WINAPI Thread1(LPVOID lp)
 {
 	int i;
-	for (i = 0; i < 5; i++)
+	for (i = 0; i < 10; i++)
 	{
 		AddText(GetDlgItem(g_hwndDlg, IDC_TEXT_MSG), TEXT("Thread1: %d \r\n"), i);
 		Sleep(2000);
@@ -84,7 +84,7 @@ DWORD WINAPI Thread1(LPVOID lp)
 DWORD WINAPI Thread2(LPVOID lp)
 {
 	int i;
-	for (i = 0; i < 5; i++)
+	for (i = 0; i < 10; i++)
 	{
 		AddText(GetDlgItem(g_hwndDlg, IDC_TEXT_MSG), TEXT("Thread2: %d \r\n"), i);
 		Sleep(2000);
