@@ -18,13 +18,15 @@ char* UnicodeToUtf8(const wchar_t* unicode);
 wchar_t* UTF8ToUnicode(const char* str);
 
 
+rapidjson::Document document;
+
 void fun2();
 void fun4();
 
 int main()
 {
 
-    fun2();
+    fun4();
     //pointFun();
 
 
@@ -69,6 +71,7 @@ void fun2() {
 
     //nickname
     wchar_t nickname[100] = { 0 };
+    sprintf(wxid, "wx_id1222");
     Value vNickName(UnicodeToUtf8(nickname), doc.GetAllocator());
     vUserInfo.AddMember("nickname", vNickName, allocator);
     
@@ -94,32 +97,32 @@ void fun2() {
 
 void fun4()
 {
-    rapidjson::Document document;
+    //rapidjson::Document document;
     document.SetObject();
-    rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
-    rapidjson::Value object1(rapidjson::kObjectType);
+    //rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+    //rapidjson::Value object1(rapidjson::kObjectType);
 
-    document.AddMember("StCode", "SS1211054", allocator);
-    document.AddMember("Timestamp", "2020-02-24 13:50:41", allocator);
+    //document.AddMember("StCode", "SS1211054", allocator);
+    //document.AddMember("Timestamp", "2020-02-24 13:50:41", allocator);
 
     // 数组
     rapidjson::Value alarmArray(rapidjson::kArrayType);
 
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 3; i++)
     {
         char strParamCode[128] = { 0 };
         sprintf(strParamCode, "param%d", i + 1);
 
         rapidjson::Value objectTemp(rapidjson::kObjectType);
         rapidjson::Value valueParamCode(strParamCode, document.GetAllocator());
-        objectTemp.AddMember("paramCode", valueParamCode, allocator);
-        objectTemp.AddMember("value", i + 10, allocator);
-        objectTemp.AddMember("mark", "N", allocator);
+        objectTemp.AddMember("paramCode", valueParamCode, document.GetAllocator());
+        objectTemp.AddMember("value", i + 10, document.GetAllocator());
+        objectTemp.AddMember("mark", "N", document.GetAllocator());
 
-        alarmArray.PushBack(objectTemp, allocator);
+        alarmArray.PushBack(objectTemp, document.GetAllocator());
     }
 
-    document.AddMember("Alarm", alarmArray, allocator);
+    document.AddMember("Alarm", alarmArray, document.GetAllocator());
 
     StringBuffer buffer;
     rapidjson::Writer<StringBuffer> writer(buffer);
