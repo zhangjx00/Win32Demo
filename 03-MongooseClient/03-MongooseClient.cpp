@@ -3,12 +3,13 @@
 
 #include "mongoose.h"
 
-
 static int s_done = 0;
 static int s_is_connected = 0;
 
 static void ev_handler(struct mg_connection* nc, int ev, void* ev_data) {
     (void)nc;
+
+    printf("-- Connection error: %d\n", ev);
 
     switch (ev) {
     case MG_EV_CONNECT: {

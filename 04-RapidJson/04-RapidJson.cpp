@@ -22,12 +22,14 @@ rapidjson::Document document;
 
 void fun2();
 void fun4();
+void jiexiJson();
 
 int main()
 {
 
-    fun4();
+    //fun4();
     //pointFun();
+    jiexiJson();
 
 
     system("pause");// 暂停以显示终端窗口
@@ -134,6 +136,49 @@ void fun4()
 }
 
 
+wchar_t* StrToWchar(std::string str)
+{
+    int strSize = (int)(str.length() + 1);
+    wchar_t* wStr = new wchar_t[strSize];
+    MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, wStr, strSize);
+    return wStr;
+    delete[] wStr;
+}
+
+
+void jiexiJson() {
+
+    char buffer[100] = "{\"data\": {\"to_wxid\": \"wxid_4j4mqsuzdgie22\",\"content\": \"中文\" },\"type\": 1}";
+
+    Document doc;
+    doc.SetObject();
+    Document::AllocatorType& allocator = doc.GetAllocator(); //获取分配器
+
+    if (doc.ParseInsitu(buffer).HasParseError()) {
+        printf("ParseInsitu is error...\n");
+        return;
+    }
+
+    int nType = doc["type"].GetInt();
+
+    string toWxid = doc["data"]["to_wxid"].GetString();
+    // wToWxid 和 wToWxid2一样
+    wchar_t* wToWxid = UTF8ToUnicode(doc["data"]["to_wxid"].GetString());
+    wchar_t* wToWxid2 = StrToWchar(doc["data"]["to_wxid"].GetString());
+
+
+    string content = doc["data"]["content"].GetString();
+    const char* cContent = {0};
+    cContent = content.c_str();
+
+    wchar_t* wContent = StrToWchar(doc["data"]["content"].GetString());
+
+
+
+
+    getchar();
+}
+
 /*
     UnicodeToUtf8
 */
@@ -165,3 +210,6 @@ wchar_t* UTF8ToUnicode(const char* str)
     MultiByteToWideChar(CP_UTF8, 0, str, -1, (LPWSTR)result, textlen);
     return    result;
 }
+
+
+

@@ -5,7 +5,7 @@
 
 HANDLE g_hMapFile;
 LPSTR g_lpBuff;
-DWORD dwType;
+char* dwType;
 
 
 int main()
@@ -24,7 +24,7 @@ int main()
             CopyMemory(&dwType, g_lpBuff, 4);
             if(dwType != 0){
                 printf("数据: %x \n", dwType);
-                *(PDWORD)g_lpBuff = 0x0;
+                *(PDWORD)g_lpBuff = NULL;
             }
             
         }
