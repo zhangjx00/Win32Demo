@@ -18,7 +18,7 @@ char* UnicodeToUtf8(const wchar_t* unicode);
 wchar_t* UTF8ToUnicode(const char* str);
 
 
-rapidjson::Document document;
+//rapidjson::Document document;
 
 void func();
 void fun2();
@@ -28,10 +28,10 @@ void jiexiJson();
 int main()
 {
     //func();
-    fun2();
+    //func();
     //pointFun();
     //jiexiJson();
-
+    fun4();
 
     system("pause");// 暂停以显示终端窗口
 }
@@ -39,32 +39,59 @@ int main()
 
 void func()
 {
-    //rapidjson::Document* ptr_doc = new rapidjson::Document();
-    //ptr_doc->Parse("{}");
-    //rapidjson::Document::AllocatorType& allocator = ptr_doc->GetAllocator();
 
-    //rapidjson::Value current_gameplay(rapidjson::kObjectType);
-    //rapidjson::Value current_gameplay_achievements(rapidjson::kObjectType);
-    //ptr_doc->AddMember("current_gameplay", current_gameplay, allocator);//对象添加
-    //ptr_doc->AddMember("current_gameplay_achievements", current_gameplay_achievements, allocator);
+    Document doc;
+    doc.SetObject();
+    Document::AllocatorType& allocator = doc.GetAllocator(); //获取分配器
+    //1.添加字符串对象
+    doc.AddMember("author", "tashaxing", allocator);
+    //2.添加数组对象
 
-    //rapidjson::Value user(rapidjson::kObjectType);
-    //if (!(*ptr_doc)["current_gameplay"].GetObject().HasMember("user"))//判断是否user对象
-    //{
-    //    (*ptr_doc)["current_gameplay"].AddMember("user", user, allocator);//current_gameplay对象添加user对象
-    //}
+    char memberList[] = "wxid_wir3w987pznk12^Gdaziran2012^Gwxid_uhdq7a2lzfft22^Gwxid_wwdaid0qockd22^Gwxid_1640216401612^Gwxid_zu2xun17g2un22^Gwxid_ltgi1v495ibm22^Gwxid_zknn0vhxjacc21^Gwxid_pxe6avbmt3v922^Gwxid_zf4m5wy6q0il22^Gwxid_5354823546114^Gwxid_tsryluo049cf22^Gli_huadong^Gwxid_3721687216112^Gwxid_zoecdrver59u22^Gwxid_mcg671o58af312^Gmu124578^Gwss199081^Gjiahe784331^Gteewsteews^Gwxid_u8x86w4jiwpp22^GJackliu2011^Gwxid_l9ie4ema9gu611^Gxiaomingagou^Gwxid_r1lr07cnq2cs22^Gwxid_sg7nxczfu5kt22^Gzhangzhongliang8008^Gwxid_l59x38zkfkmo22^Gwxid_4j4mqsuzdgie22^Gwinty2010^Glonghun0991^Gwxid_p9e216xcqfpw21^Gwxid_thatd8wsjdbf31^Gzmcmsl^Gshangjixin^Gwxid_8262k5d5h80k22^Gwxid_4sy2barbyny712^Gxiaowang360230^Gwxid_2t7fw46c94vc22^Gbeijingfang2011";
+    const char flag[3] = "^G";
+    char* wxidItem;
 
-    //rapidjson::Value strObject(rapidjson::kStringType);
-    //strObject.SetString("123");
-    //(*ptr_doc)["current_gameplay"]["user"].AddMember("id", strObject, allocator);//current_gameplay的user对象添加 id:"123";
+    /* 获取第一个子字符串 */
+    wxidItem = strtok(memberList, flag);
 
-    //(*ptr_doc)["current_gameplay"]["user"]["id"].SetString("321");//current_gameplay的user对象修改为 id:"321";
-    //(*ptr_doc)["current_gameplay"]["user"].RemoveMember("id");//current_gameplay的user对象删除id项
-    //rapidjson::StringBuffer  buffer;
-    //rapidjson::Writer<rapidjson::StringBuffer>  writer(buffer);
-    //ptr_doc->Accept(writer);
-    //auto msgToString = buffer.GetString();
-    //printf("info:%s", msgToString);
+    /* 继续获取其他的子字符串 */
+    Value array1(kArrayType);
+    while (wxidItem != NULL) {
+
+        Value string_object(kObjectType);
+        size_t nSize = strlen(wxidItem);
+        string_object.SetString(wxidItem, nSize, doc.GetAllocator());
+        array1.PushBack(string_object, allocator);
+        wxidItem = strtok(NULL, flag);
+    }
+
+
+    doc.AddMember("number", array1, allocator);
+
+
+
+    ////3.添加复合对象
+    //Value object(kObjectType);
+    //object.AddMember("language1", "C++", allocator);
+    //object.AddMember("language2", "java", allocator);
+    //doc.AddMember("language", object, allocator);
+    ////4.添加对象数组和复合对象的组合
+    //Value array2(kArrayType);
+    //Value object1(kObjectType);
+    //object1.AddMember("hobby", "drawing", allocator);
+    //array2.PushBack(object1, allocator);
+    //Value object2(kObjectType);
+    //object2.AddMember("height", 1.71, allocator);
+    //array2.PushBack(object2, allocator);
+    //doc.AddMember("information", array2, allocator);
+
+
+    StringBuffer buffer;
+    PrettyWriter<StringBuffer> pretty_writer(buffer);  //PrettyWriter是格式化的json，如果是Writer则是换行空格压缩后的json
+    doc.Accept(pretty_writer);
+    //打印到屏幕
+    cout << "the json output:" << endl;
+    cout << buffer.GetString() << endl;
 
 }
 
@@ -83,124 +110,89 @@ void func()
 */
 void fun2() {
 
-    rapidjson::Document* ptr_doc = new rapidjson::Document();
-    ptr_doc->Parse("{}");
-    rapidjson::Document::AllocatorType& allocator = ptr_doc->GetAllocator();
+        rapidjson::Document doc;
+        doc.SetObject();
+    rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
+
+    doc.AddMember("type", 11028, allocator);
+    doc.AddMember("data", "{}", allocator);
+
+    doc["data"].AddMember("user", "wx_id1222", allocator);
+    doc["data"].AddMember("wxid", "wx_id1222", allocator);
+
+    doc["data"].AddMember("avatar", "wx_id1222", allocator);
+
+    Value vData(kArrayType);
 
 
-    rapidjson::Value vType(rapidjson::kObjectType);
-    rapidjson::Value vData(rapidjson::kObjectType);
-    ptr_doc->AddMember("type", 11028, allocator);//对象添加
-    ptr_doc->AddMember("data", vData, allocator);
-    (*ptr_doc)["data"].AddMember("wxid", "wxid_xxxxxxx", allocator);//data对象添加
-    (*ptr_doc)["data"].AddMember("nickname", "中文", allocator);//data对象添加
-    (*ptr_doc)["data"].AddMember("avatar", "http://xxxxxxx", allocator);//data对象添加
+    //构建userinfo数据
+    //Value vUserInfo(kObjectType);
+
+    //wxid
+    char wxid[50] = { 0 };
+    sprintf(wxid, "wx_id1222");
+    Value vWxid(wxid, doc.GetAllocator());
+    vData.AddMember("wxid", vWxid, allocator);
+
+    //nickname
+    wchar_t nickname[100] = { 0 };
+    sprintf(wxid, "wx_id1222");
+    Value vNickName(UnicodeToUtf8(nickname), doc.GetAllocator());
+    vData.AddMember("nickname", vNickName, allocator);
+    
+    //avatar
+    char avatar[100] = { 0 };
+    sprintf(avatar, "http://124.com");
+    Value vAvatar(avatar, doc.GetAllocator());
+    vData.AddMember("avatar", vAvatar, allocator);
 
 
-    rapidjson::StringBuffer  buffer;
-    rapidjson::Writer<rapidjson::StringBuffer>  writer(buffer);
-    ptr_doc->Accept(writer);
-    auto msgToString = buffer.GetString();
+    //vData.PushBack(vUserInfo, allocator);
+    doc.AddMember("data", vData, allocator);
 
 
-    if (typeid(msgToString) == typeid(const char*)) {
-        cout << "str1的类型是：const char*" << endl;
-    }
-    if (typeid(msgToString) == typeid(wchar_t*)) {
-        cout << "str2的类型是:wchar_t" << endl;
-    }
-    if (typeid(msgToString) == typeid(const wchar_t*)) {
-        cout << "str2的类型是:wchar_t" << endl;
-    }
-    if (typeid(msgToString) == typeid(string)) {
-        cout << "str2的类型是:string" << endl;
-    }
-
-    printf("info:%s", msgToString);
-
-
-    //doc.AddMember("type", 11028, allocator);
-    //doc.AddMember("data", "{}", allocator);
-
-    //(*doc)["data"].AddMember("user", "wx_id1222", allocator);
-    //doc["data"].AddMember("wxid", "wx_id1222", allocator);
-
-    //doc["data"].AddMember("avatar", "wx_id1222", allocator);
-
-    //Value vData(kArrayType);
-
-
-    ////构建userinfo数据
-    ////Value vUserInfo(kObjectType);
-
-    ////wxid
-    //char wxid[50] = { 0 };
-    //sprintf(wxid, "wx_id1222");
-    //Value vWxid(wxid, doc.GetAllocator());
-    //vData.AddMember("wxid", vWxid, allocator);
-
-    ////nickname
-    //wchar_t nickname[100] = { 0 };
-    //sprintf(wxid, "wx_id1222");
-    //Value vNickName(UnicodeToUtf8(nickname), doc.GetAllocator());
-    //vData.AddMember("nickname", vNickName, allocator);
-    //
-    ////avatar
-    //char avatar[100] = { 0 };
-    //sprintf(avatar, "http://124.com");
-    //Value vAvatar(avatar, doc.GetAllocator());
-    //vData.AddMember("avatar", vAvatar, allocator);
-
-
-    ////vData.PushBack(vUserInfo, allocator);
-    //doc.AddMember("data", vData, allocator);
-
-
-    //StringBuffer sb;
-    //PrettyWriter<StringBuffer> writer(sb);
-    //doc.Accept(writer);    // Accept() traverses the DOM and generates Handler events.
-    //std::cout << sb.GetString() << std::endl;
+    StringBuffer sb;
+    PrettyWriter<StringBuffer> writer(sb);
+    doc.Accept(writer);    // Accept() traverses the DOM and generates Handler events.
+    std::cout << sb.GetString() << std::endl;
 
 }
 
 
 
+//解析数组
 void fun4()
 {
-    //rapidjson::Document document;
-    document.SetObject();
-    //rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
-    //rapidjson::Value object1(rapidjson::kObjectType);
 
-    //document.AddMember("StCode", "SS1211054", allocator);
-    //document.AddMember("Timestamp", "2020-02-24 13:50:41", allocator);
+    char lpSendMsgText[150] = "{\"data\": {\"to_wxid\": \"wxid_4j4mqsuzdgie22\",\"content\": \"@张zhangjx 111111111\", \"at_list\": [\"wxid_4j4mqsuzdgie22\"] },\"type\": 11036}";
+    
+    //RapidJson
+    Document doc;
+    doc.SetObject();
+    Document::AllocatorType& allocator = doc.GetAllocator(); //获取分配器
 
-    // 数组
-    rapidjson::Value alarmArray(rapidjson::kArrayType);
-
-    for (int i = 0; i < 3; i++)
-    {
-        char strParamCode[128] = { 0 };
-        sprintf(strParamCode, "param%d", i + 1);
-
-        rapidjson::Value objectTemp(rapidjson::kObjectType);
-        rapidjson::Value valueParamCode(strParamCode, document.GetAllocator());
-        objectTemp.AddMember("paramCode", valueParamCode, document.GetAllocator());
-        objectTemp.AddMember("value", i + 10, document.GetAllocator());
-        objectTemp.AddMember("mark", "N", document.GetAllocator());
-
-        alarmArray.PushBack(objectTemp, document.GetAllocator());
+    if (doc.ParseInsitu(lpSendMsgText).HasParseError()) {
+        OutputDebugString(TEXT("ParseInsitu is error...\n"));
     }
 
-    document.AddMember("Alarm", alarmArray, document.GetAllocator());
+    //解析type
+    
+    Value& infoArray = doc["data"]["at_list"];
+    if (infoArray.IsArray()) {
+        for (int i = 0; i < infoArray.Size(); i++) {
+            const Value& object = infoArray[i];
+            string lots = object.GetString();
 
-    StringBuffer buffer;
-    rapidjson::Writer<StringBuffer> writer(buffer);
-    document.Accept(writer);
+            string aa = lots;
+        }
+        
+    }
 
-    std::string jsonStr2 = buffer.GetString();
-    // 打印生成的json字符串
-    std::cout << "test2(), strJson2为: " << jsonStr2.c_str() << std::endl;
+
+    doc["data"]["at_list"].GetArray();
+
+    int nType = doc["type"].GetInt();
+
 }
 
 

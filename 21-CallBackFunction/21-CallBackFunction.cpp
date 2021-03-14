@@ -24,18 +24,18 @@ HINSTANCE hModule = LoadLibrary(L"21-CallBackDLL.dll");
 HINSTANCE hModule = LoadLibrary("21-CallBackDLL.dll");
 #endif
 
-InitFn InitWeChatSocket = (InitFn)GetProcAddress(hModule, "InitWeChatSocket");
+//InitFn InitWeChatSocket = (InitFn)GetProcAddress(hModule, "InitWeChatSocket");
 
 
-VOID  receive(DWORD clientId, LPSTR data, DWORD len)
+VOID receive(DWORD clientId, LPSTR data, DWORD len)
 {
     std::cout << "new message! " << data << endl;
 }
-VOID  accept(DWORD clientId)
+VOID accept(DWORD clientId)
 {
     std::cout << "new client! " << endl;
 }
-VOID  close(DWORD clientId)
+VOID close(DWORD clientId)
 {
     std::cout << "client closed! " << endl;
 }
@@ -45,6 +45,8 @@ int _tmain(int argc, _TCHAR* argv[])
 
     DWORD in = 0;
     BOOL rs = FALSE;
+
+    InitFn InitWeChatSocket = (InitFn)GetProcAddress(hModule, "InitWeChatSocket");
 
     rs = InitWeChatSocket(receive, accept, close);
     std::cout << "调用结果：" << rs << endl;

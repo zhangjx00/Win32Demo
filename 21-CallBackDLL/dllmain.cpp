@@ -44,31 +44,47 @@ typedef struct CallBackStruct {
     VOID(*CLOSE)(DWORD);
 } CallBackFun;
 
+CallBackFun* fun;
 
+VOID funTest(CallBackFun* fun) {
+
+    char data[10] = "abcd";
+    for (int i = 0; i < 10; i++) {
+
+        fun->RECEIVE(1, data, 10);
+        Sleep(2000);
+    }
+
+}
 
 BOOL InitWeChatSocket(VOID(*RECEIVE)(DWORD, LPSTR, DWORD), VOID(*ACCEPT)(DWORD), VOID(*CLOSE)(DWORD)) {
 
-
-
     //1、直接执行
-    char data[10] = "abcd";
-    (*RECEIVE)(1, data, 10);
-    Sleep(2000);
+    //char data[10] = "abcd";
+    //(*RECEIVE)(1, data, 10);
+    //Sleep(2000);
 
 
-    //2、开个线程执行
-
-    CallBackFun* fun = (CallBackFun*)malloc(sizeof(CallBackFun));
+    //2、赋值
+    fun = (CallBackFun*)malloc(sizeof(CallBackFun));
     fun->RECEIVE = RECEIVE;
     fun->ACCEPT = ACCEPT;
     fun->CLOSE = CLOSE;
 
-    HANDLE hThread = CreateThread(NULL, 0, ThreadProc, fun, 0, NULL);
-    if (hThread) {
-        CloseHandle(hThread);
-    }
+
+    //3、下面两种方式都可以执行
+    //方式一
+    funTest(fun);
+
+    //方式二
+    //HANDLE hThread = CreateThread(NULL, 0, ThreadProc, fun, 0, NULL);
+    //if (hThread) {
+    //    CloseHandle(hThread);
+    //}
     return TRUE;
 }
+
+
 
 
 
